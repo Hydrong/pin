@@ -1,16 +1,16 @@
 @font-face {
   font-family: "vitro-core";
-  src: url("./assets/fonts/VITRO CORE TTF.ttf");
+  src: url("/fonts/VITRO CORE TTF.ttf");
 }
 @font-face {
   font-family: "KIMM_Bold";
-  src: url("./assets/fonts/한국기계연구원_bold.ttf");
+  src: url("/fonts/한국기계연구원_bold.ttf");
   font-weight: 700;
   font-style: normal;
 }
 @font-face {
   font-family: "KIMM_Light";
-  src: url("./assets/fonts/한국기계연구원_Light.ttf");
+  src: url("/fonts/한국기계연구원_Light.ttf");
   font-weight: 0;
   font-style: normal;
 }

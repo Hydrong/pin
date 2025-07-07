@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { usePinProjectStore } from "../../stores/usePinProjectStore";
-import type { UUID } from "../../utils/uuid";
+import { uuid, type UUID } from "../../utils/uuid";
+import { focusedPinRefStore } from "../../stores/focusedPinRefStore";
+import type { Pin as PinType } from "../../types/types";
 
 const Cnt = styled.div`
   position: relative;
@@ -39,9 +41,28 @@ export const Pin: React.FC<{ boardId: UUID; pinId: UUID }> = ({
   const pin = usePinProjectStore(
     (state) => state.pinProject.boards[boardId].pins[pinId]
   );
+  const setFocusedPin = focusedPinRefStore.getState().setFocusedPin;
+  const blurFocusedPin = focusedPinRefStore.getState().blurFocusedPin;
+  const updatePinNote = usePinProjectStore((state) => state.updatePinNote);
+  const handleFocus = () => setFocusedPin(boardId, pin.id);
+  const handleBlur = () => blurFocusedPin(boardId, pin.id);
+  const handleLClick = () => {
+    if (!pin.note) updatePinNote(boardId, pin.id, 3);
+  };
+  const handleRClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    updatePinNote(boardId, pin.id, null);
+  };
+
   return (
-    <Cnt tabIndex={0}>
-      {pin.note}
+    <Cnt
+      tabIndex={0}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onClick={handleLClick}
+      onContextMenu={handleRClick}
+    >
+      {pin.note ?? "X"}
       {pin.note ? <Bar value={pin.note} /> : null}
     </Cnt>
   );

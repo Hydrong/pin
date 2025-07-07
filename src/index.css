@@ -20,6 +20,7 @@
   border: 0;
   box-sizing: border-box;
   color: inherit;
+  font: inherit;
 }
 
 body,
@@ -39,4 +40,5 @@ button {
   padding: 8px 12px;
   border-radius: 4px;
   display: block;
+  background: none;
 }

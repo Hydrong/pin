@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { produce } from "immer";
 import type { Pin, Board, PinProject } from "../types/types";
-import { uuid } from "../utils/uuid";
+import { uuid, type UUID } from "../utils/uuid";
 
 interface PinProjectStore {
   pinProject: PinProject;
   addBoard: (board: Board) => void;
-  addPin: (boardId: string, pin: Pin) => void;
-  updatePinNote: (boardId: string, pinId: string, note: number) => void;
+  addPin: (boardId: UUID, pin: Pin) => void;
+  updatePinNote: (boardId: UUID, pinId: UUID, note: number | null) => void;
 }
 
 const createInitialPinProject = (): PinProject => ({

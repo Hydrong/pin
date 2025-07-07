@@ -4,6 +4,7 @@ import type { Board as BoardType, Pin } from "../../types/types";
 import { usePinProjectStore } from "../../stores/usePinProjectStore";
 import { Board } from "./Board";
 import { uuid } from "../../utils/uuid";
+import { focusedPinRefStore } from "../../stores/focusedPinRefStore";
 
 const CntStyle = styled.div`
   padding: 70px;
@@ -27,7 +28,7 @@ const AddBoardButtonStyle = styled.div`
 export default function Content() {
   const pp = usePinProjectStore((state) => state.pinProject);
   const addBoard = usePinProjectStore((state) => state.addBoard);
-  const focusedPinRef = useRef<Pin | null>(null); // 현재 포커스된 핀 참조
+  const updatePinNote = usePinProjectStore((state) => state.updatePinNote);
 
   function createBoard() {
     const defaultBoard: BoardType = {
@@ -40,15 +41,21 @@ export default function Content() {
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      if (focusedPinRef.current && e.deltaY !== 0) {
-        // pin.note 변경 로직
+      const { focusedBoardId, focusedPinId } = focusedPinRefStore.getState();
+      if (focusedBoardId && focusedPinId && e.deltaY !== 0) {
+        const pin = pp.boards[focusedBoardId].pins[focusedPinId];
+        if (pin.note === null) return;
+        const newNote =
+          e.deltaY > 0 ? Math.max(pin.note - 1, 0) : Math.min(pin.note + 1, 10);
+
+        updatePinNote(focusedBoardId, focusedPinId, newNote);
       }
     };
     window.addEventListener("wheel", handleWheel);
     return () => {
       window.removeEventListener("wheel", handleWheel);
     };
-  }, []);
+  }, [pp]);
 
   // || --------- DOM ---------- ||
   return (
